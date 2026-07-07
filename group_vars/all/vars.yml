@@ -1,0 +1,19 @@
+active_domain: nebula.local
+nebula_base_path: /srv/nube
+data_path: /srv/nube-data
+admin_email: admin@nebula.local
+subdominios:
+  - inicio
+  - traefik
+  - nube
+  - cofre
+  - git
+  - ia
+  - panel
+  - status
+  - metrics
+  - flows
+  - db
+  - vault
+  - auth
+  - correo

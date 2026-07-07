@@ -1,0 +1,11 @@
+- name: Crear carpeta base de servicios
+  file:
+    path: "{{ nebula_base_path }}"
+    state: directory
+  become: true
+
+- name: Crear la red docker compartida "proxy"
+  community.docker.docker_network:
+    name: proxy
+    state: present
+  become: true
