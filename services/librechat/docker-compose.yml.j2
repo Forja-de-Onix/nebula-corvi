@@ -39,3 +39,7 @@ services:
     volumes:
       - {{ nebula_base_path }}/librechat/db:/data/db
     networks: [proxy]
+
+networks:
+  proxy:
+    external: true

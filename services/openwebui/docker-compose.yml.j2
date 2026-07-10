@@ -19,3 +19,7 @@ openwebui:
       - traefik.http.routers.openwebui.rule=Host(`ia.{{ active_domain }}`)
       - traefik.http.routers.openwebui.entrypoints=web
       - traefik.http.services.openwebui.loadbalancer.server.port=8080
+
+networks:
+  proxy:
+    external: true
