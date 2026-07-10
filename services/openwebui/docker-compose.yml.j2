@@ -6,7 +6,7 @@ services:
     ports:
         - "8082:8080"
     environment:
-      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - OLLAMA_BASE_URL=http://{{ ansible_default_ipv4.address }}:11434
       - WEBUI_NAME=Open-webui
     # Esto permite que el contenedor resuelva la IP del sistema host
     extra_hosts:
