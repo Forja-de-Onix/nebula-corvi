@@ -6,18 +6,13 @@ services:
     command: server /data --console-address ":9001"
     ports:
       - "9001:9001"
-      - "9002:9002"
+      - "9002:9000"
     environment:
       MINIO_ROOT_USER: admin
       MINIO_ROOT_PASSWORD: "{{ minio_root_password }}"
     volumes:
       - {{ data_path }}/minio:/data
     networks: [proxy]
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.minio.rule=Host(`minio.{{ active_domain }}`)
-      - traefik.http.routers.minio.entrypoints=web
-      - traefik.http.services.minio.loadbalancer.server.port=9001
 
 networks:
   proxy:
