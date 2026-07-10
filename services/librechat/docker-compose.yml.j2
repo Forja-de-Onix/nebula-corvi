@@ -16,6 +16,7 @@ services:
       - CREDS_IV=a22eed1222f34be23aa12c222955f1aa
       - SEARCH=false
       - TITLE_CONVO=true
+      - ALLOW_REGISTRATION=true
     volumes:
       - {{ nebula_base_path }}/librechat/uploads:/app/client/public/images
       - {{ nebula_base_path }}/librechat/logs:/app/api/logs
