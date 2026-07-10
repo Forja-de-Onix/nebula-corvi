@@ -1,0 +1,16 @@
+services:
+  jupyter:
+    image: jupyter/datascience-notebook:latest
+    container_name: jupyter
+    restart: unless-stopped
+    ports:
+      - "8888:8888"
+    environment:
+      - JUPYTER_TOKEN={{ jupyter_token }}
+    volumes:
+      - {{ data_path }}/jupyter/notebooks:/home/jovyan/work
+    networks: [proxy]
+
+networks:
+  proxy:
+    external: true
