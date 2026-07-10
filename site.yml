@@ -63,7 +63,13 @@
       command: ollama pull gemma2:2b
       when: "'gemma2:2b' not in ollama_models.stdout"
     # --- FIN BLOQUE OLLAMA BARE METAL ---
-
+    
+    - name: Generar archivo de configuración librechat.yaml desde plantilla
+      template:
+        src: librechat.yaml.j2
+        dest: "{{ nebula_base_path }}/librechat/librechat.yaml"
+        mode: '0644'
+    
     - name: Desplegar servicios estándar (rol genérico)
       include_role:
         name: compose_service
