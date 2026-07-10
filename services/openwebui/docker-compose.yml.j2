@@ -1,16 +1,16 @@
-services:
-  openwebui:
+openwebui:
     image: ghcr.io/open-webui/open-webui:main
     container_name: openwebui
     restart: unless-stopped
     ports:
-        - "8082:8080"
+      - "8082:8080"
     environment:
       - OLLAMA_BASE_URL=http://{{ ansible_default_ipv4.address }}:11434
       - WEBUI_NAME=Open-webui
-    # Esto permite que el contenedor resuelva la IP del sistema host
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - ENABLE_WEB_SEARCH=False
+      - ENABLE_CHAT_SUMMARY=False
+      - RAG_TOP_K=0
+      - ENABLE_TITLE_GENERATION=True
     volumes:
       - {{ nebula_base_path }}/openwebui/data:/app/backend/data
     networks: [proxy]
@@ -19,7 +19,3 @@ services:
       - traefik.http.routers.openwebui.rule=Host(`ia.{{ active_domain }}`)
       - traefik.http.routers.openwebui.entrypoints=web
       - traefik.http.services.openwebui.loadbalancer.server.port=8080
-
-networks:
-  proxy:
-    external: true
