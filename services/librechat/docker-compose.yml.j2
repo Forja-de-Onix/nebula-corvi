@@ -1,0 +1,40 @@
+librechat:
+  image: ghcr.io/danny-avila/librechat:latest
+  container_name: librechat
+  restart: unless-stopped
+  ports:
+    - "3080:3080"
+  environment:
+    - HOST=0.0.0.0
+    - PORT=3080
+    - MONGO_URI=mongodb://librechat-db:27017/librechat
+    - ENDPOINTS=ollama
+    - OLLAMA_BASE_URL=http://{{ ansible_default_ipv4.address }}:11434
+    - JWT_SECRET=super_secret_key_remplace_me_12345
+    - CREDS_KEY=f34be23aa12c222955f1aa222eed1222f34be23aa12c222955f1aa222eed1222
+    - CREDS_IV=a22eed1222f34be23aa12c222955f1aa
+    - SEARCH=false
+    - TITLE_CONVO=true
+  volumes:
+    - {{ nebula_base_path }}/librechat/uploads:/app/client/public/images
+    - {{ nebula_base_path }}/librechat/logs:/app/api/logs
+  networks: [proxy]
+  labels:
+    - traefik.enable=true
+    - traefik.http.routers.librechat.rule=Host(`ia.{{ active_domain }}`)
+    - traefik.http.routers.librechat.entrypoints=web
+    - traefik.http.services.librechat.loadbalancer.server.port=3080
+  depends_on:
+    - librechat-db
+
+librechat-db:
+  image: mongo:6.0-focal
+  container_name: librechat-db
+  restart: unless-stopped
+  deploy:
+    resources:
+      limits:
+        memory: 256M
+  volumes:
+    - {{ nebula_base_path }}/librechat/db:/data/db
+  networks: [proxy]
