@@ -1,0 +1,45 @@
+services:
+  # 1. Contenedor principal de Ollama
+  ollama:
+    image: ollama/ollama:latest
+    container_name: hecate-ollama
+    restart: unless-stopped
+    ports:
+      - "8082:8080"
+    volumes:
+      - {{ nebula_base_path }}/ollama/data:/root/.ollama
+    networks: [proxy]
+
+  ollama-pull-model:
+    image: ollama/ollama:latest
+    container_name: hecate-ollama-pull
+    restart: "no"
+    environment:
+      - OLLAMA_HOST=ollama:11434
+    command: pull gemma4:e2b
+    depends_on:
+      ollama:
+        condition: service_started
+    networks: [proxy]
+
+  hecate-ai:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: hecate-ai
+    restart: unless-stopped
+    depends_on:
+      - ollama
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - WEBUI_NAME=hecate AI
+    volumes:
+      - {{ nebula_base_path }}/hecate-ai/data:/app/backend/data
+    networks: [proxy]
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.hecate.rule=Host(`ia.{{ active_domain }}`)
+      - traefik.http.routers.hecate.entrypoints=web
+      - traefik.http.services.hecate.loadbalancer.server.port=8080
+
+networks:
+  proxy:
+    external: true
