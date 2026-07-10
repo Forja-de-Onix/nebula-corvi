@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: traefik:v3.1
+    image: traefik:v3.7
     container_name: traefik
     restart: unless-stopped
     ports:
@@ -8,6 +8,7 @@ services:
       - "443:443"
       - "8080:8080"
     command:
+      - --api.insecure=true
       - --api.dashboard=true
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
@@ -17,9 +18,11 @@ services:
     networks: [proxy]
     labels:
       - traefik.enable=true
-      - traefik.http.routers.dashboard.rule=Host(`traefik.{{ active_domain }}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
+      - traefik.http.routers.dashboard.rule=Host(`traefik.{{ active_domain }}`)
       - traefik.http.routers.dashboard.service=api@internal
       - traefik.http.routers.dashboard.entrypoints=web
+      - traefik.http.routers.dashboard.middlewares=no-hub
+      - traefik.http.middlewares.no-hub.headers.contentSecurityPolicy=script-src 'self'
 
 networks:
   proxy:
