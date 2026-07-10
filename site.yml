@@ -59,9 +59,9 @@
       register: ollama_models
       changed_when: false
 
-    - name: Descargar el modelo gemma2:2b (si no existe)
-      command: ollama pull gemma2:2b
-      when: "'gemma2:2b' not in ollama_models.stdout"
+    - name: Descargar el modelo hecate (si no existe)
+      command: ollama pull technomantuscorvi/hecate
+      when: "'technomantuscorvi/hecate' not in ollama_models.stdout"
     # --- FIN BLOQUE OLLAMA BARE METAL ---
     
     - name: Generar archivo de configuración librechat.yaml desde plantilla
