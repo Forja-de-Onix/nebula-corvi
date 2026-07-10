@@ -1,9 +1,69 @@
 - hosts: nebula
+  become: true # Necesario para instalar Ollama y modificar systemd
   vars:
     servicios_compose: []
   roles:
     - base
   tasks:
+    # --- INICIO BLOQUE OLLAMA BARE METAL ---
+    - name: Comprobar si Ollama ya está instalado
+      command: which ollama
+      register: ollama_check
+      ignore_errors: true
+      changed_when: false
+
+    - name: Descargar e instalar Ollama en el host
+      shell: curl -fsSL https://ollama.com/install.sh | sh
+      when: ollama_check.rc != 0
+
+    - name: Crear directorio de configuración (override) para systemd
+      file:
+        path: /etc/systemd/system/ollama.service.d
+        state: directory
+        mode: '0755'
+
+    - name: Configurar Ollama para escuchar en todas las interfaces (0.0.0.0)
+      copy:
+        dest: /etc/systemd/system/ollama.service.d/override.conf
+        content: |
+          [Service]
+          Environment="OLLAMA_HOST=0.0.0.0"
+        mode: '0644'
+      register: ollama_config
+
+    - name: Recargar systemd y reiniciar Ollama si hubo cambios
+      systemd:
+        daemon_reload: yes
+        name: ollama
+        state: restarted
+        enabled: yes
+      when: ollama_config.changed or ollama_check.rc != 0
+
+    - name: Asegurar que el servicio Ollama está iniciado
+      systemd:
+        name: ollama
+        state: started
+        enabled: yes
+
+    - name: Esperar a que la API de Ollama esté disponible
+      uri:
+        url: http://127.0.0.1:11434/
+        status_code: 200
+      register: _result
+      until: _result.status == 200
+      retries: 5
+      delay: 5
+
+    - name: Obtener lista de modelos descargados
+      command: ollama list
+      register: ollama_models
+      changed_when: false
+
+    - name: Descargar el modelo gemma2:2b (si no existe)
+      command: ollama pull gemma2:2b
+      when: "'gemma2:2b' not in ollama_models.stdout"
+    # --- FIN BLOQUE OLLAMA BARE METAL ---
+
     - name: Desplegar servicios estándar (rol genérico)
       include_role:
         name: compose_service
