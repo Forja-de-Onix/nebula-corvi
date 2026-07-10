@@ -12,6 +12,7 @@ services:
       - ENDPOINTS=ollama
       - OLLAMA_BASE_URL=http://{{ ansible_default_ipv4.address }}:11434
       - JWT_SECRET=super_secret_key_remplace_me_12345
+      - JWT_REFRESH_SECRET=another_super_secret_refresh_key_54321
       - CREDS_KEY=f34be23aa12c222955f1aa222eed1222f34be23aa12c222955f1aa222eed1222
       - CREDS_IV=a22eed1222f34be23aa12c222955f1aa
       - SEARCH=false
