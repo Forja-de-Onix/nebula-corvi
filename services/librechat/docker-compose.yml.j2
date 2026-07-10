@@ -9,8 +9,7 @@ services:
       - HOST=0.0.0.0
       - PORT=3080
       - MONGO_URI=mongodb://librechat-db:27017/librechat
-      - ENDPOINTS=ollama
-      - OLLAMA_BASE_URL=http://{{ ansible_default_ipv4.address }}:11434
+      - ENDPOINTS=custom
       - JWT_SECRET=super_secret_key_remplace_me_12345
       - JWT_REFRESH_SECRET=another_super_secret_refresh_key_54321
       - CREDS_KEY=f34be23aa12c222955f1aa222eed1222f34be23aa12c222955f1aa222eed1222
@@ -21,6 +20,9 @@ services:
     volumes:
       - {{ nebula_base_path }}/librechat/uploads:/app/client/public/images
       - {{ nebula_base_path }}/librechat/logs:/app/api/logs
+      - {{ nebula_base_path }}/librechat/librechat.yaml:/app/librechat.yaml
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks: [proxy]
     labels:
       - traefik.enable=true
