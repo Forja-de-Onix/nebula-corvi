@@ -4,8 +4,6 @@ services:
     image: ollama/ollama:latest
     container_name: hecate-ollama
     restart: unless-stopped
-    ports:
-      - "8082:8080"
     volumes:
       - {{ nebula_base_path }}/ollama/data:/root/.ollama
     networks: [proxy]
@@ -16,16 +14,22 @@ services:
     restart: "no"
     environment:
       - OLLAMA_HOST=ollama:11434
-    command: pull gemma4:e2b
     depends_on:
-      ollama:
-        condition: service_started
+      - ollama
+    command: >
+      /bin/sh -c "
+      echo 'Esperando a que el servidor Ollama inicie...' &&
+      sleep 10 &&
+      ollama pull gemma4:e2b
+      "
     networks: [proxy]
 
   hecate-ai:
     image: ghcr.io/open-webui/open-webui:main
     container_name: hecate-ai
     restart: unless-stopped
+    ports:
+      - "8082:8080"
     depends_on:
       - ollama
     environment:
