@@ -10,6 +10,7 @@ services:
       - PORT=3080
       - MONGO_URI=mongodb://librechat-db:27017/librechat
       - ENDPOINTS=custom
+      - CONFIG_PATH=/app/librechat.yaml
       - JWT_SECRET=super_secret_key_remplace_me_12345
       - JWT_REFRESH_SECRET=another_super_secret_refresh_key_54321
       - CREDS_KEY=f34be23aa12c222955f1aa222eed1222f34be23aa12c222955f1aa222eed1222
