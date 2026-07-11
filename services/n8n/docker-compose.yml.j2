@@ -6,10 +6,8 @@ services:
     ports:
       - "5678:5678"
     environment:
-      - N8N_HOST=flows.{{ active_domain }}
       - N8N_PROTOCOL=http
       - N8N_PORT=5678
-      - WEBHOOK_URL=http://flows.{{ active_domain }}/
       - N8N_INSTANCE_OWNER_MANAGED_BY_ENV=true
       - N8N_INSTANCE_OWNER_EMAIL={{ admin_email }}
       - N8N_INSTANCE_OWNER_PASSWORD_HASH={{ n8n_owner_password_hash }}
