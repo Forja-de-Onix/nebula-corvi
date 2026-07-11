@@ -90,16 +90,7 @@
         recurse: yes
 
     # --- FIN BLOQUE OLLAMA BARE METAL ---
-
-    - name: Crear carpeta del servicio para mongo/redis/postgres y n8n
-      file:
-        path: "{{ nebula_base_path }}/{{ service_name }}"
-        state: directory
-        recurse: true
-        owner: "1000"
-        group: "1000"
-      become: true
-        
+    
     - name: Generar archivo de configuración librechat.yaml desde plantilla
       template:
         src: "{{ playbook_dir }}/services/librechat/librechat.yaml.j2"
