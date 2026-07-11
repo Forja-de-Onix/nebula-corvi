@@ -104,3 +104,15 @@
       vars:
         service_name: "{{ item }}"
       loop: "{{ servicios_compose }}"
+    
+    - name: Crear base de datos para Huginn
+      community.postgresql.postgresql_db:
+        name: huginn
+      become: true
+
+    - name: Crear usuario de Huginn
+      community.postgresql.postgresql_user:
+        db: huginn
+        name: huginn_user
+        password: "{{ huginn_db_password }}"
+      become: true

@@ -1,0 +1,27 @@
+services:
+  huginn:
+    image: ghcr.io/huginn/huginn
+    container_name: huginn
+    restart: unless-stopped
+    ports:
+      - "3003:3000"
+    environment:
+      - DATABASE_ADAPTER=postgresql
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=huginn
+      - DATABASE_USERNAME=huginn_user
+      - DATABASE_PASSWORD={{ huginn_db_password }}
+      - APP_SECRET_TOKEN={{ huginn_app_secret_token }}
+      - DOMAIN=192.168.1.87:3003
+      - HUGINN_SEED_USERNAME=admin
+      - HUGINN_SEED_PASSWORD={{ huginn_admin_password }}
+      - INVITATION_CODE={{ huginn_invitation_code }}
+      - TIMEZONE=Europe/Madrid
+    volumes:
+      - {{ nebula_base_path }}/huginn/data:/var/lib/huginn
+    networks: [proxy]
+
+networks:
+  proxy:
+    external: true
