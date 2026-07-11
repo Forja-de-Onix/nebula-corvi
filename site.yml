@@ -4,7 +4,7 @@
     servicios_compose: []
   roles:
     - base
-    - mail
+  tags: ["mail"]
   tasks:
     # --- INICIO BLOQUE OLLAMA BARE METAL ---
     - name: Comprobar si Ollama ya está instalado

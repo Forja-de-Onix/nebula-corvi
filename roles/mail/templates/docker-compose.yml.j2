@@ -10,7 +10,7 @@ services:
       - TZ=Europe/Madrid
       - HTTPS=OFF
     volumes:
-      - {{ data_path }}/mail:/data
+      - {{ nebula_base_path }}/mail/data:/data
     networks: [proxy]
     labels:
       - traefik.enable=true
