@@ -59,9 +59,25 @@
       register: ollama_models
       changed_when: false
 
-    - name: Descargar el modelo hecate (si no existe)
-      command: ollama pull technomantuscorvi/hecate
-      when: "'technomantuscorvi/hecate' not in ollama_models.stdout"
+    - name: Transmutar a Hecate para simplificar nombre
+      command: ollama cp technomantuscorvi/hecate hecate
+      register: hecate_cp
+      changed_when: false
+      ignore_errors: true 
+
+    - name: Purgar el cascarón original para mantener el orden (ollama rm)
+      command: ollama rm technomantuscorvi/hecate
+      when: hecate_cp.rc == 0
+      ignore_errors: true
+
+    - name: Otorgar permisos de escritura al contenedor sobre los archivos subidos
+      file:
+        path: "{{ nebula_base_path }}/librechat/uploads"
+        state: directory
+        owner: "1000"
+        group: "1000"
+        recurse: yes
+        
     # --- FIN BLOQUE OLLAMA BARE METAL ---
     
     - name: Generar archivo de configuración librechat.yaml desde plantilla
