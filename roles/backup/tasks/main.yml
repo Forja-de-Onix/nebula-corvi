@@ -1,0 +1,19 @@
+- name: Asegurar que Restic está instalado
+  apt:
+    name: restic
+    state: present
+
+- name: Desplegar script de respaldo
+  template:
+    src: backup-nebula.sh.j2
+    dest: /usr/local/bin/backup-nebula.sh
+    mode: '0700'
+    owner: root
+    group: root
+
+- name: Programar el respaldo en el crontab
+  cron:
+    name: "Respaldo diario de Nebula"
+    minute: "0"
+    hour: "3"
+    job: "/usr/local/bin/backup-nebula.sh"

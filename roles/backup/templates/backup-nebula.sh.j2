@@ -1,0 +1,6 @@
+#!/bin/bash
+# Script generado por Ansible - No editar manualmente
+export AWS_ACCESS_KEY_ID="{{ restic_access_key }}"
+export AWS_SECRET_ACCESS_KEY="{{ restic_secret_key }}"
+
+/usr/bin/restic -r {{ restic_repo_url }} backup /srv/nube --exclude-caches
