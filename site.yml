@@ -4,7 +4,7 @@
     servicios_compose: []
   roles:
     - base
-  tags: ["mail"]
+    - mail 
   tasks:
     # --- INICIO BLOQUE OLLAMA BARE METAL ---
     - name: Comprobar si Ollama ya está instalado
@@ -60,16 +60,26 @@
       register: ollama_models
       changed_when: false
 
-    - name: Transmutar a Hecate para simplificar nombre
-      command: ollama cp technomantuscorvi/hecate hecate
-      register: hecate_cp
+    - name: Comprobar si el modelo final (hecate) ya existe
+      shell: ollama list | grep -q "^hecate "
+      register: check_target
+      failed_when: false
       changed_when: false
-      ignore_errors: true 
 
-    - name: Purgar el cascarón original para mantener el orden (ollama rm)
+    - name: Comprobar si el modelo fuente existe (solo si falta el final)
+      shell: ollama list | grep -q "^technomantuscorvi/hecate "
+      register: check_source
+      failed_when: false
+      changed_when: false
+      when: check_target.rc != 0
+
+    - name: Transmutar a Hecate (copiar modelo)
+      command: ollama cp technomantuscorvi/hecate hecate
+      when: check_target.rc != 0 and check_source.rc == 0
+
+    - name: Purgar el cascarón original
       command: ollama rm technomantuscorvi/hecate
-      when: hecate_cp.rc == 0
-      ignore_errors: true
+      when: check_target.rc != 0 and check_source.rc == 0
 
     - name: Otorgar permisos de escritura al contenedor sobre los archivos subidos
       file:
