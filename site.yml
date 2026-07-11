@@ -90,6 +90,25 @@
         group: "1000"
         recurse: yes
 
+    - name: Instalar dependencia psycopg2 para los módulos de PostgreSQL de Ansible
+      apt:
+        name: python3-psycopg2
+        state: present
+        update_cache: true
+      become: true
+
+    - name: Crear carpeta base de servicios
+      file:
+        path: "{{ nebula_base_path }}"
+        state: directory
+      become: true
+
+    - name: Crear la red docker compartida "proxy"
+      community.docker.docker_network:
+        name: proxy
+        state: present
+      become: true
+
     # --- FIN BLOQUE OLLAMA BARE METAL ---
     
     - name: Generar archivo de configuración librechat.yaml desde plantilla
