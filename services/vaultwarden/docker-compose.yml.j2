@@ -1,0 +1,19 @@
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    ports:
+        - "8084:80"
+    volumes:
+      - {{ nebula_base_path }}/vaultwarden/data:/data
+    networks: [proxy]
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.vault.rule=Host(`vault.{{ active_domain }}`)
+      - traefik.http.routers.vault.entrypoints=web
+      - traefik.http.services.vault.loadbalancer.server.port=80
+
+networks:
+  proxy:
+    external: true
