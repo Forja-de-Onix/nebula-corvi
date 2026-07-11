@@ -1,0 +1,20 @@
+services:
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: redisinsight
+    restart: unless-stopped
+    ports:
+      - "8092:5540"
+    environment:
+      - RI_ACCEPT_TERMS_AND_CONDITIONS=true
+      - RI_REDIS_HOST0=redis
+      - RI_REDIS_PORT0=6379
+      - RI_REDIS_ALIAS0=Nebula Corvi - Redis
+      - RI_REDIS_PASSWORD0={{ redis_password }}
+    volumes:
+      - {{ nebula_base_path }}/redisinsight/data:/data
+    networks: [proxy]
+
+networks:
+  proxy:
+    external: true

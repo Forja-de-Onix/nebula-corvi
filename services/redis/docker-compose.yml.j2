@@ -1,0 +1,13 @@
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    restart: unless-stopped
+    command: ["redis-server", "--requirepass", "{{ redis_password }}"]
+    volumes:
+      - {{ data_path }}/redis:/data
+    networks: [proxy]
+
+networks:
+  proxy:
+    external: true

@@ -1,0 +1,16 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: mongodb
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD={{ mongodb_root_password }}
+    volumes:
+      - {{ data_path }}/mongodb:/data/db
+      - {{ nebula_base_path }}/mongodb/init:/docker-entrypoint-initdb.d:ro
+    networks: [proxy]
+
+networks:
+  proxy:
+    external: true

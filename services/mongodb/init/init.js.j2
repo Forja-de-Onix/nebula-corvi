@@ -1,0 +1,3 @@
+db = db.getSiblingDB('nebula_corvi');
+db.createCollection('prueba');
+db.articulos.insertOne({ titulo: "Dato de prueba", creado: new Date() });

@@ -1,0 +1,18 @@
+services:
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: unless-stopped
+    ports:
+      - "8978:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL={{ admin_email }}
+      - PGADMIN_DEFAULT_PASSWORD={{ pgadmin_password }}
+    volumes:
+      - {{ nebula_base_path }}/pgadmin/data:/var/lib/pgadmin
+      - {{ nebula_base_path }}/pgadmin/servers.json:/pgadmin4/servers.json:ro
+    networks: [proxy]
+
+networks:
+  proxy:
+    external: true
