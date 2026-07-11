@@ -1,0 +1,23 @@
+services:
+  mailserver:
+    image: analogic/poste.io
+    container_name: nebula-mail
+    restart: unless-stopped
+    hostname: correo.{{ active_domain }}
+    ports:
+        - "8083:80"
+    environment:
+      - TZ=Europe/Madrid
+      - HTTPS=OFF
+    volumes:
+      - {{ data_path }}/mail:/data
+    networks: [proxy]
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.webmail.rule=Host(`correo.{{ active_domain }}`)
+      - traefik.http.routers.webmail.entrypoints=web
+      - traefik.http.services.webmail.loadbalancer.server.port=80
+
+networks:
+  proxy:
+    external: true

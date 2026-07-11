@@ -1,0 +1,18 @@
+- name: Crear carpeta del servicio
+  file:
+    path: "{{ nebula_base_path }}/mail"
+    state: directory
+    recurse: true
+  become: true
+
+- name: Generar docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ nebula_base_path }}/mail/docker-compose.yml"
+  become: true
+
+- name: Levantar el servicio
+  community.docker.docker_compose_v2:
+    project_src: "{{ nebula_base_path }}/mail"
+    state: present
+  become: true

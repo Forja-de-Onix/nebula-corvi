@@ -4,6 +4,7 @@
     servicios_compose: []
   roles:
     - base
+    - mail
   tasks:
     # --- INICIO BLOQUE OLLAMA BARE METAL ---
     - name: Comprobar si Ollama ya está instalado
@@ -77,7 +78,7 @@
         owner: "1000"
         group: "1000"
         recurse: yes
-        
+
     # --- FIN BLOQUE OLLAMA BARE METAL ---
     
     - name: Generar archivo de configuración librechat.yaml desde plantilla
