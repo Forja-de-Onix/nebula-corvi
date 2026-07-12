@@ -127,6 +127,10 @@
     - name: Crear base de datos para Huginn
       community.postgresql.postgresql_db:
         name: huginn
+        login_host: 127.0.0.1
+        login_port: 5432
+        login_user: postgres
+        login_password: "{{ postgres_admin_password }}"
       become: true
 
     - name: Crear usuario de Huginn
@@ -134,4 +138,8 @@
         db: huginn
         name: huginn_user
         password: "{{ huginn_db_password }}"
+        login_host: 127.0.0.1
+        login_port: 5432
+        login_user: postgres
+        login_password: "{{ postgres_admin_password }}"
       become: true
