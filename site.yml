@@ -164,6 +164,20 @@
         login_password: "{{ postgres_admin_password }}"
       become: true
 
+    - name: Desplegar servicios estándar (rol genérico)
+      include_role:
+        name: compose_service
+      vars:
+        service_name: "{{ item }}"
+      loop: "{{ servicios_compose }}"
+
+    - name: Esperar a que Node-RED genere su settings.js inicial
+      wait_for:
+        path: "{{ nebula_base_path }}/node-red/data/settings.js"
+        state: present
+        timeout: 60
+      when: "'node-red' in servicios_compose"
+
     - name: Añadir autenticación a settings.js de Node-RED
       blockinfile:
         path: "{{ nebula_base_path }}/node-red/data/settings.js"
@@ -178,3 +192,12 @@
               }]
           };
       become: true
+      when: "'node-red' in servicios_compose"
+      register: nodered_auth_result
+
+    - name: Reiniciar Node-RED si se aplicó la autenticación
+      community.docker.docker_container:
+        name: node-red
+        state: started
+        restart: true
+      when: nodered_auth_result.changed | default(false)
