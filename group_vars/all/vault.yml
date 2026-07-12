@@ -1,3 +1,4 @@
+minio_root_user: "admin"
 minio_root_password: "CambiaEstaClave123!"
 nextcloud_db_root_password: "CambiaEstaClave123!"
 nextcloud_db_password: "CambiaEstaClave123!"
