@@ -139,6 +139,7 @@
         docker exec kopia kopia repository create s3
         --bucket=backups
         --endpoint=minio:9000
+        --disable-tls
         --access-key={{ minio_root_user }}
         --secret-access-key={{ minio_root_password }}
         --password={{ kopia_repo_password }}
