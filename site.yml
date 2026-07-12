@@ -163,3 +163,18 @@
         login_user: postgres
         login_password: "{{ postgres_admin_password }}"
       become: true
+
+    - name: Añadir autenticación a settings.js de Node-RED
+      blockinfile:
+        path: "{{ nebula_base_path }}/node-red/data/settings.js"
+        marker: "// {mark} ANSIBLE MANAGED BLOCK - Nebula Corvi auth"
+        block: |
+          module.exports.adminAuth = {
+              type: "credentials",
+              users: [{
+                  username: "{{ nodered_admin_user }}",
+                  password: "{{ nodered_admin_password_hash }}",
+                  permissions: "*"
+              }]
+          };
+      become: true
