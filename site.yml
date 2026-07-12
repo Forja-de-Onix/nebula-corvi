@@ -133,6 +133,7 @@
     - name: Crear base de datos para Huginn
       community.postgresql.postgresql_db:
         name: huginn
+        owner: huginn_user
         login_host: 127.0.0.1
         login_port: 5432
         login_user: postgres
@@ -144,6 +145,19 @@
         db: huginn
         name: huginn_user
         password: "{{ huginn_db_password }}"
+        login_host: 127.0.0.1
+        login_port: 5432
+        login_user: postgres
+        login_password: "{{ postgres_admin_password }}"
+      become: true
+
+    - name: Dar permisos de creación en el esquema public a huginn_user
+      community.postgresql.postgresql_privs:
+        db: huginn
+        role: huginn_user
+        type: schema
+        objs: public
+        privs: CREATE,USAGE
         login_host: 127.0.0.1
         login_port: 5432
         login_user: postgres
