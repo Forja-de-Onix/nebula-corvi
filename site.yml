@@ -97,6 +97,12 @@
         update_cache: true
       become: true
 
+    - name: Instalar cliente psql para poder verificar/administrar Postgres desde el host
+      apt:
+        name: postgresql-client
+        state: present
+      become: true
+
     - name: Crear carpeta base de servicios
       file:
         path: "{{ nebula_base_path }}"
@@ -138,6 +144,7 @@
         db: huginn
         name: huginn_user
         password: "{{ huginn_db_password }}"
+        update_password: always
         login_host: 127.0.0.1
         login_port: 5432
         login_user: postgres
