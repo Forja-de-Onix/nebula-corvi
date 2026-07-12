@@ -129,3 +129,18 @@
       vars:
         service_name: "{{ item }}"
       loop: "{{ servicios_compose }}"
+
+    - name: Comprobar si el repositorio Kopia ya existe
+      stat:
+        path: "{{ nebula_base_path }}/kopia/config/repository.config"
+      register: kopia_repo_check
+
+    - name: Crear el repositorio Kopia en MinIO (solo la primera vez)
+      command: >
+        docker exec kopia kopia repository create s3
+        --bucket=backups
+        --endpoint=minio:9000
+        --access-key={{ minio_root_user }}
+        --secret-access-key={{ minio_root_password }}
+        --password={{ kopia_repo_password }}
+      when: not kopia_repo_check.stat.exists

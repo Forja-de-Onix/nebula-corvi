@@ -1,0 +1,29 @@
+services:
+  kopia:
+    image: kopia/kopia:latest
+    container_name: kopia
+    restart: unless-stopped
+    ports:
+      - "51515:51515"
+    environment:
+      - KOPIA_PASSWORD={{ kopia_repo_password }}
+      - TZ=Europe/Madrid
+    command:
+      - server
+      - start
+      - --disable-csrf-token-checks
+      - --insecure
+      - --address=0.0.0.0:51515
+      - --server-username={{ kopia_ui_user }}
+      - --server-password={{ kopia_ui_password }}
+    volumes:
+      - {{ nebula_base_path }}/kopia/config:/app/config
+      - {{ nebula_base_path }}/kopia/cache:/app/cache
+      - {{ nebula_base_path }}/kopia/logs:/app/logs
+      - /srv/nube:/backup/nube:ro
+      - /srv/nube-data:/backup/nube-data:ro
+    networks: [proxy]
+
+networks:
+  proxy:
+    external: true
