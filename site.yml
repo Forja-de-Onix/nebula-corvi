@@ -5,7 +5,6 @@
   roles:
     - { role: base, tags: ['base'] }
     - { role: mail, tags: ['mail'] } 
-    - { role: backup, tags: ['backup'] } 
   tasks:
     # --- INICIO BLOQUE OLLAMA BARE METAL ---
     - name: Comprobar si Ollama ya está instalado
