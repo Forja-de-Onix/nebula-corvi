@@ -131,8 +131,8 @@
 
     - name: Crear el bucket "backups" en MinIO (idempotente)
       command: >
-        docker run --rm --network proxy minio/mc
-        sh -c "mc alias set local http://minio:9000 admin {{ minio_root_password }} && mc mb --ignore-existing local/backups"
+        docker run --rm --network proxy --entrypoint sh minio/mc
+        -c "mc alias set local http://minio:9000 admin {{ minio_root_password }} && mc mb --ignore-existing local/backups"
       register: minio_bucket_result
       changed_when: "'Bucket created successfully' in minio_bucket_result.stdout"
 
