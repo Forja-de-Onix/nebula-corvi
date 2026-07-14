@@ -1,7 +1,11 @@
 - hosts: nebula
-  become: true # Necesario para instalar Ollama y modificar systemd
+  become: true 
   vars:
     servicios_compose: []
+    service_uids:
+      postgres: '999'
+      pgadmin: '5050'
+      default: '1000'
   roles:
     - { role: base, tags: ['base'] }
     - { role: mail, tags: ['mail'] } 
@@ -127,6 +131,7 @@
         name: compose_service
       vars:
         service_name: "{{ item }}"
+        service_owner_uid: "{{ service_uids[item] }} | default(service_uids['default']) }}"
       loop: "{{ servicios_compose }}"
 
     - name: Crear el bucket "backups" en MinIO (idempotente)
