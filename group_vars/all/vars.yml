@@ -1,7 +1,7 @@
 active_domain: nebula.local
 nebula_base_path: /srv/nube
 data_path: /srv/nube-data
-admin_email: admin@nebula.local
+admin_email: admin@nebulacorvi.com
 subdominios:
   - inicio
   - traefik
