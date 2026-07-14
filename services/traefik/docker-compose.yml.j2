@@ -25,7 +25,8 @@ services:
       - traefik.http.routers.dashboard.entrypoints=web
       - traefik.http.routers.dashboard.middlewares=no-hub
       - traefik.http.middlewares.no-hub.headers.contentSecurityPolicy=script-src 'self'
-      
+      - "traefik.http.services.homepage.loadbalancer.server.port=3000"
+      - "traefik.http.services.homepage.loadbalancer.server.scheme=http"
 networks:
   proxy:
     external: true
