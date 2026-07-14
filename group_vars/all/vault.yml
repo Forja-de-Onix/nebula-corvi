@@ -13,3 +13,7 @@ redis_password: "CambiaEstaClave123!"
 kopia_repo_password: "a3f9c81b2e4d7f0691c3a8b5"
 kopia_ui_user: "admin"
 kopia_ui_password: "a3f9c81b2e4d7f0691c3a8b5"
+authelia_session_secret: "CambiaEstaClave123!"
+authelia_storage_key: "CambiaEstaClave123!"
+# clave cifrada original: TuContraseñaReal123!
+authelia_admin_password_hash: "$argon2id$v=19$m=65536,t=3,p=4$Ofbf2LvpVA0oL5k3+XDS1g$UUMMAUsY4CDowwBU49n/0fpocbOrhW3BhVVsXqrmAkU"
