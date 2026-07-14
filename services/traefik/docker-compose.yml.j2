@@ -8,25 +8,19 @@ services:
       - "443:443"
       - "8080:8080"
     command:
-      - --api.insecure=true
       - --api.dashboard=true
+      - --api.insecure=true
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
       - --providers.docker.network=proxy
       - --entrypoints.web.address=:80
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    networks: [proxy]
+    networks:
+      - proxy
     labels:
-      - traefik.enable=true
-      - traefik.docker.network=proxy
-      - traefik.http.routers.dashboard.rule=Host(`traefik.{{ active_domain }}`)
-      - traefik.http.routers.dashboard.service=api@internal
-      - traefik.http.routers.dashboard.entrypoints=web
-      - traefik.http.routers.dashboard.middlewares=no-hub
-      - traefik.http.middlewares.no-hub.headers.contentSecurityPolicy=script-src 'self'
-      - "traefik.http.services.homepage.loadbalancer.server.port=3000"
-      - "traefik.http.services.homepage.loadbalancer.server.scheme=http"
-networks:
-  proxy:
-    external: true
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.api.rule=Host(`traefik.{{ active_domain }}`)"
+      - "traefik.http.routers.api.service=api@internal"
+      - "traefik.http.routers.api.entrypoints=web"
