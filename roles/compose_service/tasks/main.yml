@@ -3,8 +3,8 @@
     path: "{{ nebula_base_path }}/{{ service_name }}"
     state: directory
     recurse: true
-    owner: "1000"
-    group: "1000"
+    owner: "{{ service_owner_uid | default('1000') }}"
+    group: "{{ service_owner_uid | default('1000') }}"
   become: true
 
 - name: Generar docker-compose.yml desde la plantilla del servicio

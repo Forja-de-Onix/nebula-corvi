@@ -135,3 +135,11 @@
         -c "mc alias set local http://minio:9000 admin {{ minio_root_password }} && mc mb --ignore-existing local/backups"
       register: minio_bucket_result
       changed_when: "'Bucket created successfully' in minio_bucket_result.stdout"
+
+    - name: Desplegar servicios estándar (rol genérico)
+      include_role:
+        name: compose_service
+      vars:
+        service_name: "{{ item }}"
+        service_owner_uid: "{{ '999' if item == 'postgres' else '1000' }}"
+      loop: "{{ servicios_compose }}"
