@@ -1,0 +1,18 @@
+services:
+  onlyoffice:
+    image: onlyoffice/documentserver:latest
+    container_name: onlyoffice
+    restart: unless-stopped
+    ports:
+      - "8094:80"
+    environment:
+      - JWT_ENABLED=true
+      - JWT_SECRET={{ onlyoffice_jwt_secret }}
+    volumes:
+      - {{ nebula_base_path }}/onlyoffice/data:/var/www/onlyoffice/Data
+      - {{ nebula_base_path }}/onlyoffice/log:/var/log/onlyoffice
+    networks: [proxy]
+
+networks:
+  proxy:
+    external: true
