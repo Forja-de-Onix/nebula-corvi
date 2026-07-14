@@ -131,7 +131,7 @@
         name: compose_service
       vars:
         service_name: "{{ item }}"
-        service_owner_uid: "{{ service_uids[item] }} | default(service_uids['default']) }}"
+        service_owner_uid: "{{ service_uids[item] | default(service_uids['default']) }}"
       loop: "{{ servicios_compose }}"
 
     - name: Crear el bucket "backups" en MinIO (idempotente)
