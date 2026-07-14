@@ -12,7 +12,7 @@ services:
       - --api.dashboard=true
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
-      - --entrypoints.websecure.http.tls=true
+      - --providers.docker.network=proxy
       - --entrypoints.web.address=:80
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
