@@ -135,19 +135,3 @@
         -c "mc alias set local http://minio:9000 admin {{ minio_root_password }} && mc mb --ignore-existing local/backups"
       register: minio_bucket_result
       changed_when: "'Bucket created successfully' in minio_bucket_result.stdout"
-
-    - name: Comprobar si el repositorio Kopia ya existe
-      stat:
-        path: "{{ nebula_base_path }}/kopia/config/repository.config"
-      register: kopia_repo_check
-
-    - name: Crear el repositorio Kopia en MinIO (solo la primera vez)
-      command: >
-        docker exec kopia kopia repository create s3
-        --bucket=backups
-        --endpoint=minio:9000
-        --disable-tls
-        --access-key={{ minio_root_user }}
-        --secret-access-key={{ minio_root_password }}
-        --password={{ kopia_repo_password }}
-      when: not kopia_repo_check.stat.exists
