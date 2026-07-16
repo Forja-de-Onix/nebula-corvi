@@ -141,3 +141,4 @@
         -c "mc alias set local http://minio:9000 admin {{ minio_root_password }} && mc mb --ignore-existing local/backups"
       register: minio_bucket_result
       changed_when: "'Bucket created successfully' in minio_bucket_result.stdout"
+      when: "'minio' in servicios_compose"

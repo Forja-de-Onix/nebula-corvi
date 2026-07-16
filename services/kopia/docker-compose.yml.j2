@@ -23,6 +23,11 @@ services:
       - /srv/nube:/backup/nube:ro
       - /srv/nube-data:/backup/nube-data:ro
     networks: [proxy]
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.kopia.rule=Host(`backup.{{ active_domain }}`)
+      - traefik.http.routers.kopia.entrypoints=web
+      - traefik.http.services.kopia.loadbalancer.server.port=51515
 
 networks:
   proxy:

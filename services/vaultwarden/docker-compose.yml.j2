@@ -10,9 +10,9 @@ services:
     networks: [proxy]
     labels:
       - traefik.enable=true
-      - traefik.http.routers.vault.rule=Host(`vault.{{ active_domain }}`)
-      - traefik.http.routers.vault.entrypoints=web
-      - traefik.http.services.vault.loadbalancer.server.port=80
+      - traefik.http.routers.vaultwarden.rule=Host(`vault.{{ active_domain }}`)
+      - traefik.http.routers.vaultwarden.entrypoints=web
+      - traefik.http.services.vaultwarden.loadbalancer.server.port=80
 
 networks:
   proxy:

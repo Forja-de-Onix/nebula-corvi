@@ -9,6 +9,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - {{ nebula_base_path }}/portainer/data:/data
     networks: [proxy]
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.portainer.rule=Host(`panel.{{ active_domain }}`)
+      - traefik.http.routers.portainer.entrypoints=web
+      - traefik.http.services.portainer.loadbalancer.server.port=9000
 
 networks:
   proxy:

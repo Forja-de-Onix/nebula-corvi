@@ -12,6 +12,11 @@ services:
       - ME_CONFIG_BASICAUTH_USERNAME={{ mongo_express_user }}
       - ME_CONFIG_BASICAUTH_PASSWORD={{ mongo_express_password }}
     networks: [proxy]
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.mongo-express.rule=Host(`mongo.{{ active_domain }}`)
+      - traefik.http.routers.mongo-express.entrypoints=web
+      - traefik.http.services.mongo-express.loadbalancer.server.port=8081
 
 networks:
   proxy:

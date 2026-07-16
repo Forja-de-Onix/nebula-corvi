@@ -10,6 +10,11 @@ services:
     volumes:
       - {{ data_path }}/jupyter/notebooks:/home/jovyan/work
     networks: [proxy]
+    labels:
+          - traefik.enable=true
+          - traefik.http.routers.jupyter.rule=Host(`notebook.{{ active_domain }}`)
+          - traefik.http.routers.jupyter.entrypoints=web
+          - traefik.http.services.jupyter.loadbalancer.server.port=8888
 
 networks:
   proxy:

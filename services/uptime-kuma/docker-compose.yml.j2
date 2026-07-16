@@ -8,6 +8,11 @@ services:
     volumes:
       - {{ nebula_base_path }}/uptime-kuma/data:/app/data
     networks: [proxy]
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.uptime-kuma.rule=Host(`status.{{ active_domain }}`)
+      - traefik.http.routers.uptime-kuma.entrypoints=web
+      - traefik.http.services.uptime-kuma.loadbalancer.server.port=3001
 
 networks:
   proxy:

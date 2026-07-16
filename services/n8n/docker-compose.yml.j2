@@ -10,7 +10,11 @@ services:
     volumes:
       - {{ nebula_base_path }}/n8n/data:/home/node/.n8n
     networks: [proxy]
-
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.n8n.rule=Host(`flows.{{ active_domain }}`)
+      - traefik.http.routers.n8n.entrypoints=web
+      - traefik.http.services.n8n.loadbalancer.server.port=5678
 networks:
   proxy:
     external: true

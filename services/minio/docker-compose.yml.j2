@@ -13,6 +13,11 @@ services:
     volumes:
       - {{ data_path }}/minio:/data
     networks: [proxy]
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.minio.rule=Host(`minio.{{ active_domain }}`)
+      - traefik.http.routers.minio.entrypoints=web
+      - traefik.http.services.minio.loadbalancer.server.port=9001
 
 networks:
   proxy:
