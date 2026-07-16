@@ -8,6 +8,7 @@ services:
     volumes:
       - {{ nebula_base_path }}/homepage/config:/app/config
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - {{ nebula_base_path }}/homepage/public:/app/public
     networks: [proxy]
     labels:
       - traefik.enable=true

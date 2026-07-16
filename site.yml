@@ -157,3 +157,20 @@
         mode: '0644'
       when: "'homepage' in servicios_compose"
       become: true
+
+    - name: Desplegar settings.yaml de Homepage
+      template:
+        src: "{{ playbook_dir }}/services/homepage/settings.yaml.j2"
+        dest: "{{ nebula_base_path }}/homepage/config/settings.yaml"
+        mode: '0644'
+      when: "'homepage' in servicios_compose"
+      become: true
+
+    - name: Sincronizar imágenes de Homepage
+      synchronize:
+        src: "{{ playbook_dir }}/services/homepage/images/"
+        dest: "{{ nebula_base_path }}/homepage/public/images/"
+        recursive: yes
+        delete: yes
+      when: "'homepage' in servicios_compose"
+      become: true
