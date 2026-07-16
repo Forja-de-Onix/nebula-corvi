@@ -4,7 +4,7 @@ services:
     container_name: homepage
     restart: unless-stopped
     environment:
-      - HOMEPAGE_ALLOWED_HOSTS=192.168.1.87:3000
+      - HOMEPAGE_ALLOWED_HOSTS=192.168.1.87:3000,inicio.localhost
     volumes:
       - {{ nebula_base_path }}/homepage/config:/app/config
       - /var/run/docker.sock:/var/run/docker.sock:ro
