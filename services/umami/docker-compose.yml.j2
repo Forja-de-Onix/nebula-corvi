@@ -1,0 +1,33 @@
+services:
+  umami-db:
+    image: postgres:15-alpine
+    container_name: umami-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=umami
+      - POSTGRES_PASSWORD={{ umami_db_password }}
+      - POSTGRES_DB=umami
+    volumes:
+      - {{ data_path }}/umami/db:/var/lib/postgresql/data
+    networks: [proxy]
+
+  umami:
+    image: ghcr.io/umami-software/umami:postgresql-latest
+    container_name: umami
+    restart: unless-stopped
+    depends_on:
+      - umami-db
+    environment:
+      - DATABASE_URL=postgresql://umami:{{ umami_db_password }}@umami-db:5432/umami
+      - DATABASE_TYPE=postgresql
+      - APP_SECRET={{ umami_app_secret }}
+    networks: [proxy]
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.umami.rule=Host(`analytics.{{ active_domain }}`)
+      - traefik.http.routers.umami.entrypoints=web
+      - traefik.http.services.umami.loadbalancer.server.port=3000
+
+networks:
+  proxy:
+    external: true

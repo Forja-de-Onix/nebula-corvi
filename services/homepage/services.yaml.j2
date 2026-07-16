@@ -1,0 +1,90 @@
+---
+- Infraestructura:
+    - Traefik:
+        icon: traefik.svg
+        href: http://traefik.{{ active_domain }}/dashboard/
+        description: Reverse Proxy
+    - Portainer:
+        icon: portainer.svg
+        href: http://panel.{{ active_domain }}
+        description: Docker Management
+    - Kopia:
+        icon: kopia.svg
+        href: http://backup.{{ active_domain }}
+        description: Backups
+    - Authelia:
+        icon: authelia.svg
+        href: http://auth.{{ active_domain }}
+        description: Gestión de Identidad y SSO
+
+- Nube y Datos:
+    - Nextcloud:
+        icon: nextcloud.svg
+        href: http://nube.{{ active_domain }}
+        description: Almacenamiento y Sync
+    - MinIO:
+        icon: minio.svg
+        href: http://minio.{{ active_domain }}
+        description: Object Storage (S3)
+    - Vaultwarden:
+        icon: vaultwarden.svg
+        href: http://vault.{{ active_domain }}
+        description: Gestor de contraseñas
+
+- Desarrollo e IA:
+    - Gitea:
+        icon: gitea.svg
+        href: http://git.{{ active_domain }}
+        description: Control de versiones
+    - Librechat:
+        icon: ollama.svg
+        href: http://ia.{{ active_domain }}
+        description: Asistente IA (Open WebUI)
+    - JupyterLab:
+        icon: jupyter.svg
+        href: http://notebook.{{ active_domain }}
+        description: Ciencia de datos
+    - Code Server:
+        icon: vscode.svg
+        href: http://code.{{ active_domain }}
+        description: Desarrollo de software
+    - Penpot:
+        icon: penpot.svg
+        href: http://design.{{ active_domain }}
+        description: Diseño y prototipado
+
+- Bases de Datos:
+    - pgAdmin:
+        icon: postgresql.svg
+        href: http://postgres.{{ active_domain }}
+        description: Postgres Management
+    - Mongo Express:
+        icon: mongodb.svg
+        href: http://mongo.{{ active_domain }}
+        description: MongoDB Management
+    - RedisInsight:
+        icon: redis.svg
+        href: http://redis.{{ active_domain }}
+        description: Redis Management
+
+- Operaciones y Monitorización:
+    - Netdata:
+        icon: netdata.svg
+        href: http://metrics.{{ active_domain }}
+        description: Métricas del host en tiempo real
+    - Uptime Kuma:
+        icon: uptime-kuma.svg
+        href: http://status.{{ active_domain }}
+        description: Estado de servicios
+    - Umami:
+        icon: umami.svg
+        href: http://umami.{{ active_domain }}
+        description: Analíticas de uso
+    - n8n:
+        icon: n8n.svg
+        href: http://flows.{{ active_domain }}
+        description: Automatización de flujos
+    - Poste Webmail:
+        icon: mdi-email
+        href: http://correo.{{ active_domain }}
+        description: Panel de Poste.io

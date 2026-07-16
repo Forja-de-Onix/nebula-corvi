@@ -2,18 +2,29 @@ active_domain: localhost
 nebula_base_path: /srv/nube
 data_path: /srv/nube-data
 admin_email: admin@nebulacorvi.com
-subdominios:
-  - inicio
+todos_los_servicios:
   - traefik
-  - nube
-  - cofre
-  - git
-  - ia
-  - panel
-  - status
-  - metrics
-  - flows
-  - db
-  - vault
-  - auth
-  - correo
+  - portainer
+  - homepage
+  - minio
+  - nextcloud
+  - gitea
+  - librechat
+  - vaultwarden
+  - netdata
+  - uptime-kuma
+  - n8n
+  - postgres
+  - pgadmin
+  - mongodb
+  - mongo-express
+  - redis
+  - redisinsight
+  - kopia
+  - jupyter
+  - umami
+  - penpot
+  - vscode
+  - collabora
+
+servicios_compose: "{{ todos_los_servicios }}"

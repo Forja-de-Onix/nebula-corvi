@@ -1,7 +1,6 @@
 - hosts: nebula
   become: true 
   vars:
-    servicios_compose: []
     service_uids:
       postgres: '999'
       pgadmin: '5050'
@@ -142,3 +141,19 @@
       register: minio_bucket_result
       changed_when: "'Bucket created successfully' in minio_bucket_result.stdout"
       when: "'minio' in servicios_compose"
+    
+    - name: Desplegar configuración de Homepage (servicios)
+      template:
+        src: "{{ playbook_dir }}/services/homepage/services.yaml.j2"
+        dest: "{{ nebula_base_path }}/homepage/config/services.yaml"
+        mode: '0644'
+      when: "'homepage' in servicios_compose"
+      become: true
+
+    - name: Desplegar configuración de marcadores (bookmarks) de Homepage
+      template:
+        src: "{{ playbook_dir }}/services/homepage/bookmarks.yaml.j2"
+        dest: "{{ nebula_base_path }}/homepage/config/bookmarks.yaml"
+        mode: '0644'
+      when: "'homepage' in servicios_compose"
+      become: true

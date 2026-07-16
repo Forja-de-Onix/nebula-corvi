@@ -1,4 +1,4 @@
-- name: Crear carpeta del servicio
+- name: Crear carpeta del servicio {{ service_name }}
   file:
     path: "{{ nebula_base_path }}/{{ service_name }}"
     state: directory
@@ -7,13 +7,13 @@
     group: "{{ service_owner_uid | default('1000') }}"
   become: true
 
-- name: Generar docker-compose.yml desde la plantilla del servicio
+- name: Generar docker-compose.yml de {{ service_name }}
   template:
     src: "{{ playbook_dir }}/services/{{ service_name }}/docker-compose.yml.j2"
     dest: "{{ nebula_base_path }}/{{ service_name }}/docker-compose.yml"
   become: true
 
-- name: Levantar el servicio
+- name: Levantar el servicio {{ service_name }}
   community.docker.docker_compose_v2:
     project_src: "{{ nebula_base_path }}/{{ service_name }}"
     state: present
