@@ -1,4 +1,4 @@
-active_domain: nebulacorvi.com
+active_domain: localhost
 nebula_base_path: /srv/nube
 data_path: /srv/nube-data
 admin_email: admin@nebulacorvi.com

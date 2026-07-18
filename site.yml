@@ -173,6 +173,16 @@
             state: link
             force: yes
     
+    - name: Corregir permisos de la base de datos interna de Gitea
+      file:
+        path: "{{ nebula_base_path }}/gitea/db"
+        state: directory
+        recurse: true
+        owner: '999'
+        group: '999'
+      become: true
+      when: "'gitea' in servicios_compose"
+    
     - name: Desplegar servicios estándar (rol genérico)
       include_role:
         name: compose_service
@@ -180,6 +190,13 @@
         service_name: "{{ item }}"
         service_owner_uid: "{{ service_uids[item] | default(service_uids['default']) }}"
       loop: "{{ servicios_compose }}"
+
+    - name: Reiniciar gitea-db si se corrigieron permisos
+      community.docker.docker_container:
+        name: gitea-db
+        state: started
+        restart: true
+      when: "'gitea' in servicios_compose"
 
     - name: Crear el bucket "backups" en MinIO (idempotente)
       command: >
