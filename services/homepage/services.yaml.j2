@@ -12,10 +12,6 @@
         icon: kopia.svg
         href: http://backup.{{ active_domain }}
         description: Backups
-    - Authelia:
-        icon: authelia.svg
-        href: http://auth.{{ active_domain }}
-        description: Gestión de Identidad y SSO
 
 - Nube y Datos:
     - Nextcloud:
@@ -48,8 +44,12 @@
         icon: vscode.svg
         href: http://code.{{ active_domain }}
         description: Desarrollo de software
-    - Penpot:
-        icon: penpot.svg
+    - TTYD:
+        icon: mdi-console
+        href: http://console.{{ active_domain }}
+        description: Terminal del servidor
+    - Excalidraw:
+        icon: excalidraw.svg
         href: http://design.{{ active_domain }}
         description: Diseño y prototipado
 
@@ -68,10 +68,14 @@
         description: Redis Management
 
 - Operaciones y Monitorización:
-    - Netdata:
-        icon: netdata.svg
-        href: http://metrics.{{ active_domain }}
-        description: Métricas del host en tiempo real
+    - Prometheus:
+        icon: prometheus.svg
+        href: http://prometheus.{{ active_domain }}
+        description: Motor de recolección y base de datos temporal
+    - Grafana:
+        icon: grafana.svg
+        href: http://grafana.{{ active_domain }}
+        description: Visualización avanzada y cuadros de mando
     - Uptime Kuma:
         icon: uptime-kuma.svg
         href: http://status.{{ active_domain }}

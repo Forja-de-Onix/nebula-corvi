@@ -1,0 +1,19 @@
+services:
+  ttyd:
+    image: tsl0922/ttyd:latest
+    container_name: ttyd
+    restart: unless-stopped
+    privileged: true
+    pid: host
+    ports:
+      - "8096:7681"
+    networks: [proxy]
+    command: ["ttyd", "-W", "-c", "{{ ttyd_user }}:{{ ttyd_password }}", "nsenter", "-t", "1", "-m", "-u", "-n", "-i", "-p", "su", "-", "{{ server_username }}"] 
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.ttyd.rule=Host(`console.{{ active_domain }}`)
+      - traefik.http.routers.ttyd.entrypoints=web
+
+networks:
+  proxy:
+    external: true

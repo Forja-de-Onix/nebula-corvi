@@ -8,7 +8,6 @@ services:
       - "8080:8080"
     command:
       - --api=true
-      - --api.insecure=true
       - --api.dashboard=true
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
@@ -19,9 +18,11 @@ services:
       - proxy
     labels:
       - traefik.enable=true
-      - traefik.http.routers.dashboard.rule=Host(`traefik.{{ active_domain }}`)
+      - traefik.http.routers.dashboard.rule=Host(`traefik.{{ active_domain }}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
       - traefik.http.routers.dashboard.service=api@internal
       - traefik.http.routers.dashboard.entrypoints=web
+      - traefik.http.routers.dashboard.middlewares=panel-auth@docker
+      - traefik.http.middlewares.panel-auth.basicauth.users={{ panel_auth_htpasswd | replace('$', '$$') }}
 networks:
   proxy:
     external: true

@@ -2,6 +2,14 @@ active_domain: localhost
 nebula_base_path: /srv/nube
 data_path: /srv/nube-data
 admin_email: admin@nebulacorvi.com
+server_username: scholaris
+service_uids:
+  prometheus: '65534'
+  grafana: '472'
+  postgres: '999'
+  pgadmin: '5050'
+  default: '1000'
+
 todos_los_servicios:
   - traefik
   - portainer
@@ -11,7 +19,6 @@ todos_los_servicios:
   - gitea
   - librechat
   - vaultwarden
-  - netdata
   - uptime-kuma
   - n8n
   - postgres
@@ -23,8 +30,12 @@ todos_los_servicios:
   - kopia
   - jupyter
   - umami
-  - penpot
+  - excalidraw
   - vscode
-  - collabora
+  - node-exporter
+  - cadvisor
+  - prometheus
+  - grafana
+  - ttyd
 
 servicios_compose: "{{ todos_los_servicios }}"

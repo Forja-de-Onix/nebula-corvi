@@ -15,7 +15,7 @@ services:
       - traefik.http.routers.homepage.rule=Host(`inicio.{{ active_domain }}`)
       - traefik.http.routers.homepage.entrypoints=web
       - traefik.http.services.homepage.loadbalancer.server.port=3000
-
+      - traefik.http.routers.homepage.middlewares=panel-auth@docker
 networks:
   proxy:
     external: true

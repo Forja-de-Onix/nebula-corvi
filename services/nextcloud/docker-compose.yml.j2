@@ -12,7 +12,7 @@ services:
       - {{ nebula_base_path }}/nextcloud/db:/var/lib/mysql
     networks: [proxy]
 
-  redis:
+  nextcloud-cache:
     image: redis:alpine
     container_name: nextcloud-redis
     restart: unless-stopped
@@ -22,7 +22,7 @@ services:
     image: nextcloud:latest
     container_name: nextcloud
     restart: unless-stopped
-    depends_on: [db, redis]
+    depends_on: [db, nextcloud-cache]
     ports:
       - "8081:80"
     environment:
@@ -30,7 +30,7 @@ services:
       MYSQL_DATABASE: nextcloud
       MYSQL_USER: nextcloud
       MYSQL_PASSWORD: "{{ nextcloud_db_password }}"
-      REDIS_HOST: redis
+      REDIS_HOST: nextcloud-redis
       OVERWRITECLIURL: "http://nube.{{ active_domain }}"
     volumes:
       - {{ data_path }}/nextcloud:/var/www/html

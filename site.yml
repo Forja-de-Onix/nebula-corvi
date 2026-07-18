@@ -1,14 +1,8 @@
 - hosts: nebula
   become: true 
-  vars:
-    service_uids:
-      postgres: '999'
-      pgadmin: '5050'
-      default: '1000'
   roles:
     - { role: base, tags: ['base'] }
-    - { role: mail, tags: ['mail'] } 
-    - { role: authelia, tags: ['authelia']}
+    - { role: mail, tags: ['mail'] }
   tasks:
     # --- INICIO BLOQUE OLLAMA BARE METAL ---
     - name: Comprobar si Ollama ya está instalado
@@ -126,6 +120,32 @@
         dest: "{{ nebula_base_path }}/librechat/librechat.yaml"
         mode: '0644'
     
+    - name: Crear carpeta de Prometheus
+      file:
+        path: "{{ nebula_base_path }}/prometheus"
+        state: directory
+        recurse: true
+      when: "'prometheus' in servicios_compose"
+
+    - name: Generar configuración de Prometheus
+      template:
+        src: "{{ playbook_dir }}/services/prometheus/prometheus.yml.j2"
+        dest: "{{ nebula_base_path }}/prometheus/prometheus.yml"
+      when: "'prometheus' in servicios_compose"
+
+    - name: Crear carpeta de datasources de Grafana
+      file:
+        path: "{{ nebula_base_path }}/grafana/provisioning/datasources"
+        state: directory
+        recurse: true
+      when: "'grafana' in servicios_compose"
+
+    - name: Generar datasource de Prometheus para Grafana
+      template:
+        src: "{{ playbook_dir }}/services/grafana/datasources.yml.j2"
+        dest: "{{ nebula_base_path }}/grafana/provisioning/datasources/datasources.yml"
+      when: "'grafana' in servicios_compose"
+    
     - name: Desplegar servicios estándar (rol genérico)
       include_role:
         name: compose_service
@@ -162,6 +182,14 @@
       template:
         src: "{{ playbook_dir }}/services/homepage/settings.yaml.j2"
         dest: "{{ nebula_base_path }}/homepage/config/settings.yaml"
+        mode: '0644'
+      when: "'homepage' in servicios_compose"
+      become: true
+
+    - name: Desplegar widgets.yaml de Homepage
+      template:
+        src: "{{ playbook_dir }}/services/homepage/widgets.yaml.j2"
+        dest: "{{ nebula_base_path }}/homepage/config/widgets.yaml"
         mode: '0644'
       when: "'homepage' in servicios_compose"
       become: true

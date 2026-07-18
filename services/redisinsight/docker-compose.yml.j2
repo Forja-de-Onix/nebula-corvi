@@ -19,7 +19,7 @@ services:
       - traefik.http.routers.redisinsight.rule=Host(`redis.{{ active_domain }}`)
       - traefik.http.routers.redisinsight.entrypoints=web
       - traefik.http.services.redisinsight.loadbalancer.server.port=5540
-
+      - traefik.http.routers.redisinsight.middlewares=panel-auth@docker
 networks:
   proxy:
     external: true

@@ -1,0 +1,20 @@
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - {{ nebula_base_path }}/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - {{ nebula_base_path }}/prometheus/data:/prometheus
+    networks: [proxy]
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.prometheus.rule=Host(`prometheus.{{ active_domain }}`)
+      - traefik.http.routers.prometheus.entrypoints=web
+      - traefik.http.services.prometheus.loadbalancer.server.port=9090
+      - traefik.http.routers.prometheus.middlewares=panel-auth@docker
+networks:
+  proxy:
+    external: true

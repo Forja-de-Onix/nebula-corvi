@@ -4,7 +4,7 @@ endpoints:
   custom:
     - name: "Ollama"
       apiKey: "ollama"
-      baseURL: "http://{{ ansible_default_ipv4.address }}:11434/v1/"
+      baseURL: "http://{{ ansible_facts["default_ipv4"].address }}:11434/v1/"
       models:
         default: [ "hecate:latest" ]
         fetch: true
