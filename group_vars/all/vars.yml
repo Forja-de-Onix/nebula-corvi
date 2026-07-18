@@ -1,4 +1,4 @@
-active_domain: localhost
+active_domain: nebulacorvi.com
 nebula_base_path: /srv/nube
 data_path: /srv/nube-data
 admin_email: admin@nebulacorvi.com
@@ -6,6 +6,7 @@ server_username: scholaris
 service_uids:
   prometheus: '65534'
   grafana: '472'
+  loki: '10001'
   postgres: '999'
   pgadmin: '5050'
   default: '1000'
@@ -36,6 +37,9 @@ todos_los_servicios:
   - cadvisor
   - prometheus
   - grafana
+  - loki
+  - promtail
   - ttyd
+  - technitium
 
 servicios_compose: "{{ todos_los_servicios }}"

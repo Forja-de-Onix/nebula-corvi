@@ -145,6 +145,33 @@
         src: "{{ playbook_dir }}/services/grafana/datasources.yml.j2"
         dest: "{{ nebula_base_path }}/grafana/provisioning/datasources/datasources.yml"
       when: "'grafana' in servicios_compose"
+
+    - name: Generar archivo de configuración de Promtail
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/services/promtail/promtail-config.yml.j2"
+        dest: "/srv/nube/promtail/promtail-config.yml"
+
+    - name: Asegurar que el puerto 53 esté libre para contenedores DNS
+      become: true
+      block:
+        - name: Desactivar DNSStubListener en systemd-resolved
+          ansible.builtin.lineinfile:
+            path: /etc/systemd/resolved.conf
+            regexp: '^#?DNSStubListener='
+            line: 'DNSStubListener=no'
+            state: present
+
+        - name: Reiniciar systemd-resolved inmediatamente
+          ansible.builtin.systemd:
+            name: systemd-resolved
+            state: restarted
+
+        - name: Asegurar el enlace correcto de resolv.conf
+          ansible.builtin.file:
+            src: /run/systemd/resolve/resolv.conf
+            dest: /etc/resolv.conf
+            state: link
+            force: yes
     
     - name: Desplegar servicios estándar (rol genérico)
       include_role:
@@ -202,3 +229,19 @@
         delete: yes
       when: "'homepage' in servicios_compose"
       become: true
+
+    - name: Detectar la interfaz de red principal
+      set_fact:
+        interfaz_principal: "{{ ansible_facts['default_ipv4']['interface'] }}"
+
+    - name: Configurar Technitium como DNS del sistema
+      command: "resolvectl dns {{ interfaz_principal }} {{ ansible_facts['default_ipv4']['address'] }}"
+      become: true
+      when: "'technitium' in servicios_compose"
+      changed_when: true
+
+    - name: Configurar el dominio de búsqueda para nebulacorvi.com
+      command: "resolvectl domain {{ interfaz_principal }} ~{{ active_domain }}"
+      become: true
+      when: "'technitium' in servicios_compose"
+      changed_when: true

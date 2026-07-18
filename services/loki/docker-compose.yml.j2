@@ -1,0 +1,19 @@
+services:
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    restart: unless-stopped
+    ports:
+      - "3100:3100"
+    volumes:
+      - {{ nebula_base_path }}/loki/data:/loki
+    networks: [proxy]
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.loki.rule=Host(`loki.{{ active_domain }}`)
+      - traefik.http.routers.loki.entrypoints=web
+      - traefik.http.services.loki.loadbalancer.server.port=3100
+
+networks:
+  proxy:
+    external: true

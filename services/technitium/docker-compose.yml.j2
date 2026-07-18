@@ -1,0 +1,21 @@
+services:
+  technitium:
+    image: technitium/dns-server:latest
+    container_name: technitium
+    restart: unless-stopped
+    ports:
+      - "5380:5380"
+      - "53:53/udp"
+      - "53:53/tcp"
+    volumes:
+      - {{ nebula_base_path }}/technitium/config:/etc/dns
+    networks: [proxy]
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.technitium.rule=Host(`dns.{{ active_domain }}`)
+      - traefik.http.routers.technitium.entrypoints=web
+      - traefik.http.services.technitium.loadbalancer.server.port=5380
+      - traefik.docker.network=proxy
+networks:
+  proxy:
+    external: true
