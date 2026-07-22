@@ -31,7 +31,6 @@ todos_los_servicios:
   - kopia
   - jupyter
   - umami
-  - excalidraw
   - vscode
   - node-exporter
   - cadvisor
@@ -41,5 +40,7 @@ todos_los_servicios:
   - promtail
   - ttyd
   - technitium
+  - registry
+  - rabbitmq
 
 servicios_compose: "{{ todos_los_servicios }}"

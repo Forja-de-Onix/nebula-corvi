@@ -262,3 +262,43 @@
       become: true
       when: "'technitium' in servicios_compose"
       changed_when: true
+    
+    - name: Crear carpeta de autenticación del registro
+      file:
+        path: "{{ nebula_base_path }}/registry/auth"
+        state: directory
+        recurse: true
+      when: "'registry' in servicios_compose"
+
+    - name: Comprobar si ya existe el htpasswd del registro
+      stat:
+        path: "{{ nebula_base_path }}/registry/auth/htpasswd"
+      register: registry_htpasswd_check
+      when: "'registry' in servicios_compose"
+
+    - name: Generar htpasswd del registro (solo la primera vez)
+      shell: "htpasswd -Bbn {{ registry_user }} {{ registry_password }} > {{ nebula_base_path }}/registry/auth/htpasswd"
+      when: "'registry' in servicios_compose and not registry_htpasswd_check.stat.exists"
+
+    - name: Asegurar que las dependencias de Python para htpasswd están instaladas
+      ansible.builtin.apt:
+        name: python3-passlib
+        state: present
+        update_cache: yes
+      become: true
+
+    - name: Asegurar que la carpeta de auth existe
+      ansible.builtin.file:
+        path: "{{ nebula_base_path }}/registry/auth"
+        state: directory
+        mode: '0755'
+
+    - name: Generar archivo htpasswd para el Registro (requiere python3-passlib)
+      community.general.htpasswd:
+        path: "{{ nebula_base_path }}/registry/auth/htpasswd"
+        name: "{{ registry_user }}"
+        password: "{{ registry_password }}"
+        crypt_scheme: bcrypt
+        owner: root
+        group: root
+        mode: '0644'

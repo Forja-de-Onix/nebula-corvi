@@ -1,0 +1,24 @@
+services:
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: rabbitmq
+    restart: unless-stopped
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER={{ rabbitmq_user }}
+      - RABBITMQ_DEFAULT_PASS={{ rabbitmq_password }}
+    volumes:
+      - {{ data_path }}/rabbitmq:/var/lib/rabbitmq
+    networks: [proxy]
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.rabbitmq.rule=Host(`rabbitmq.{{ active_domain }}`)
+      - traefik.http.routers.rabbitmq.entrypoints=web
+      - traefik.http.services.rabbitmq.loadbalancer.server.port=15672
+
+networks:
+  proxy:
+    external: true

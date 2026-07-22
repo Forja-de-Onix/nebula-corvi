@@ -1,0 +1,41 @@
+services:
+  registry:
+    image: registry:2
+    container_name: registry
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - REGISTRY_AUTH=htpasswd
+      - REGISTRY_AUTH_HTPASSWD_REALM=Registry
+      - REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd
+      - REGISTRY_HTTP_HEADERS_Access-Control-Allow-Origin=[http://registro.{{ active_domain }}]
+      - REGISTRY_HTTP_HEADERS_Access-Control-Allow-Methods=[HEAD,GET,OPTIONS,DELETE]
+      - REGISTRY_HTTP_HEADERS_Access-Control-Allow-Credentials=[true]
+      - REGISTRY_HTTP_HEADERS_Access-Control-Allow-Headers=[Authorization,Accept,Cache-Control]
+      - REGISTRY_HTTP_HEADERS_Access-Control-Expose-Headers=[Docker-Content-Digest]
+    volumes:
+      - {{ data_path }}/registry:/var/lib/registry
+      - {{ nebula_base_path }}/registry/auth:/auth
+    networks: [proxy]
+
+  registry-ui:
+    image: joxit/docker-registry-ui:latest
+    container_name: registry-ui
+    restart: unless-stopped
+    ports:
+      - "5001:80"
+    environment:
+      - REGISTRY_TITLE=Nebula Corvi - Registro
+      - REGISTRY_URL=http://registro.{{ active_domain }}:5000
+      - DELETE_IMAGES=true
+    networks: [proxy]
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.registry-ui.rule=Host(`registro.{{ active_domain }}`)
+      - traefik.http.routers.registry-ui.entrypoints=web
+      - traefik.http.services.registry-ui.loadbalancer.server.port=80
+
+networks:
+  proxy:
+    external: true
