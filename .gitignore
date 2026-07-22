@@ -1,0 +1,34 @@
+# Vault — CRÍTICO: esto NUNCA debe subirse al repositorio
+.vault_pass
+.vault-pass
+*.vault_pass
+
+# Backups temporales de vault.yml sin cifrar (solo existen durante el proceso de cifrado)
+group_vars/all/vault.yml.bak
+group_vars/all/vault.yml.plaintext
+*.bak
+
+# Ansible
+*.retry
+.ansible/
+ansible.log
+
+# Python (módulos de PostgreSQL/Docker instalados vía pip, entornos virtuales)
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*~
+
+# Ficheros de entorno locales sueltos, si los usas para pruebas puntuales
+.env
+.env.local
