@@ -302,3 +302,39 @@
         owner: root
         group: root
         mode: '0644'
+    
+    - name: Crear base de datos para Umami
+      community.postgresql.postgresql_db:
+        name: umami
+        login_host: 127.0.0.1
+        login_port: 5432
+        login_user: postgres
+        login_password: "{{ postgres_admin_password }}"
+      become: true
+      when: "'umami' in servicios_compose"
+
+    - name: Crear usuario de Umami
+      community.postgresql.postgresql_user:
+        db: umami
+        name: umami_user
+        password: "{{ umami_db_password }}"
+        login_host: 127.0.0.1
+        login_port: 5432
+        login_user: postgres
+        login_password: "{{ postgres_admin_password }}"
+      become: true
+      when: "'umami' in servicios_compose"
+
+    - name: Dar permisos de creación en el esquema public a umami_user
+      community.postgresql.postgresql_privs:
+        db: umami
+        role: umami_user
+        type: schema
+        objs: public
+        privs: CREATE,USAGE
+        login_host: 127.0.0.1
+        login_port: 5432
+        login_user: postgres
+        login_password: "{{ postgres_admin_password }}"
+      become: true
+      when: "'umami' in servicios_compose"

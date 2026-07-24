@@ -30,7 +30,6 @@ todos_los_servicios:
   - redisinsight
   - kopia
   - jupyter
-  - umami
   - vscode
   - node-exporter
   - cadvisor
@@ -42,5 +41,6 @@ todos_los_servicios:
   - technitium
   - registry
   - rabbitmq
+  - umami
 
 servicios_compose: "{{ todos_los_servicios }}"
